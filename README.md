@@ -1,4 +1,4 @@
-#### Markov Decision Processes (MDP's) & Active Reinforcement Learning
+# Markov Decision Processes (MDP's) & Active Reinforcement Learning
 
 ## Defining MDP's
 
@@ -45,13 +45,13 @@ With these we try to find:
 
 **Reinforcement Learning** uses rewards and punishments and instead of trying to find patterns in data (as would be the case in supervised/unsupervised learning), tries to find an action model (policy) which will give the maximum cumulative reward.
 
-# Passive Reinforcement Learning
+## Passive Reinforcement Learning
 
 We have no prior knowledge of the enviroment and no prior knowldge of the reward function.
 
 The agent does not know how the enviroment works or what its actions do
  
-# Important Definitions
+### Important Definitions
 
 **Value** is he future reward that an agent would receive by taking an action at a particular state
 **Policy** maps state to action

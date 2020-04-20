@@ -2,17 +2,3 @@ X - Difference Active / Non-active reinforcement learning
 X - Difference model-based / model-free
 X - Relationship MDP / reinforcement learning
 
-
-Model-Free:
-	X - Experiment with different values for exploration & exploitation & describe effect on outcome (if any)
-	X - Describe when to stop learning process
-	X - Print the utility value for each state/action/state triplet
-
-
-Model-Based:
-	X - Experiment with different values for exploration & exploitation & describe effect on outcome (if any)
-	X - Describe when to stop learning process
-	X - Experiment with different discount values & describe effect on policy
-	X - Experiment with different epsilon values & describe effect on policy
-	X - Print the transition probabilities for each state/action/state triplet
-
