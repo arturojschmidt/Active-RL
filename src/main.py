@@ -1,7 +1,7 @@
 
 from enviroment import Enviroment
-from state import State
-from action import Action
+
+from modelFreeActiveLearning import ModelFreeActiveLearning
 import sys
 
 def main():
@@ -10,9 +10,10 @@ def main():
     args = sys.argv
     print(args)
     agentEnviroment = Enviroment()
-    agentEnviroment.parseEnviroment(args[1])
+    agentEnviroment.parseEnviroment("exampleInput.txt")
+    agent = ModelFreeActiveLearning(0.8,10,agentEnviroment,30,1000)
+    agent.QLearning()
 
-    
 
     #print(agentEnviroment.takeAction(s,a))
 

@@ -4,6 +4,7 @@ from ActiveLearning import ActiveLearning
 import numpy as np
 import random
 
+from pprint import pprint
 #Q(s,a) = Q(s,a) + alpha(R(s) + y maxQ(s',a') - Q(s,a))
 # q of previous state and action is equal to itself + its reward + the difference 
 
@@ -16,44 +17,53 @@ from collections import defaultdict
 
 class ModelFreeActiveLearning(ActiveLearning):
 
-    def __init__(self, learnRate, discountValue, enviroment, minTries):
-        ActiveLearning.__init__(self, learnRate,discountValue)
+    def __init__(self, learnRate, maxShots, enviroment, minTries, epochs):
+        ActiveLearning.__init__(self, learnRate,maxShots)
         self.enviroment = enviroment
-        self._qtable = defaultdict(list)
+        self._qtable = defaultdict(int)
         self._stateActionFrequency = defaultdict(int)
-        self._prevState = None
-        self._prevReward = 0
-        self._prevAction = None
+
         self._minTries = minTries
+        self.maxShots = maxShots
+        self._epochs = epochs
 
     def _getNextAction(self, state):  # balances exploration vs exploitation 
         
         # get the highest qvalued action at passed state
+        #print("state to choose action from:" , state)
         maxQAction = self.getMaxQAction(state)
-
-      
+        randomAction = self.getRandomAction(state)
+        if maxQAction == None:
+            #print('random state 1: ', randomAction)
+            return randomAction
+ 
         if self._stateActionFrequency[(state,maxQAction)] > self._minTries: # greedy approach since we've seen > minTries examples
+            print("MAX PRINTED")
             return maxQAction
-        #else return a random action
-        return self.getRandomAction(state) # exploration
+        #print('random state 23: ', randomAction)
+        return randomAction # exploration
         
 
     
     def getMaxQAction(self,state):
-        currentMax = 0
-        for k, v in self._qtable:
+        currentMax = float('-inf')
+        maxAction = None
+        #print('state')
+        #print(self._qtable)
+        for k, v in self._qtable.items():
+            #print('k', k)
+            #print('v',v)
             if k[0] == state and v > currentMax:
-                maxAction = state[1]
+                maxAction = k[1]
         return maxAction
         #for every action that is available from this state
         #return the action which corresponds to the highest qvalue
 
     def getRandomAction(self,state):
-        possibleActions = list()
-        #for every action that is available from this state
-        for k, v in self._qtable:
-            if k[0] == state:
-                possibleActions.append(k[1])
+        possibleActions = list(self.enviroment.getPossibleActions(state))
+        #print(possibleActions)
+        if len(possibleActions) == 0:
+            return None
         return random.choice(possibleActions)
 
         
@@ -68,44 +78,42 @@ class ModelFreeActiveLearning(ActiveLearning):
         # take the action in the enviroment
         # update q[s,a] table 
         #set s to resulting s, 
-        prevState = self.enviroment.getStartingState()
 
         counter = 0
-        while(counter < self._minTries):
+        while(counter < self._epochs):
             notInTerminalState = True
-            while(notInTerminalState):
+            currentShots = 0
+            prevState = self.enviroment.getStartingState()
+            while currentShots < self.maxShots and notInTerminalState:
+
+                #gets max q action for given state
                 action = self._getNextAction(prevState)   # this is the function that handles exploration vs exploitation
-                currentState, reward = self.enviroment.takeAction(action)
-                prevAction = action
+                # returns new state and reward of that state when taking the action in previous state
+                print(prevState, action)
+                currentState, reward = self.enviroment.takeActionInState(action,prevState)
+                print(prevState, "," , action, "-->" , currentState)
+                    
+                self._stateActionFrequency[(prevState, action)] += 1
 
-                self._stateActionFrequency[(prevState, prevAction)] += 1
-
-                frequency       = self._stateActionFrequency[(prevState, prevAction)]
-                currentQValue   = self._qtable[prevState,prevAction]
-                nextMaxQAction  = self.getMaxQAction(currentState)
+                nextMaxQAction  = self._getNextAction(currentState)
                 nextMaxQValue   = self._qtable[currentState, nextMaxQAction]
+                currentQValue   = self._qtable[prevState,action]
 
-                currentQValue += self.learnRate*(frequency)*(reward + self.discountValue * nextMaxQValue - currentQValue)
+                newQvalue = round(currentQValue + self.learnRate*(reward + nextMaxQValue - currentQValue),2)
+                self._qtable[prevState,action] = newQvalue
+                
+                
+                print("q(", prevState, ",", action,") = ", self._qtable[prevState,action])
+
                 prevState = currentState
+                print("-----------------------------")
 
-                if currentState.isTerminal():
+                if currentState == self.enviroment.getTerminalState():
                     notInTerminalState = False
 
+                currentShots += 1
             counter += 1
-
-
-        #get available actions from current state
-        actionsAvailable = self.enviroment.getActions(self._prevState)
-
-        # determine which action to take
-        # 
-        #check if there are any actions available
-        #if there are none 
-            #set the result to the appropriate reward of that state
-        if len(actionsAvailable) == 0:
-            self._qValuePairs[(self._prevState, None)] = self._prevReward
-
-        self._stateActionFrequency[(self._prevState, self.)]
+        pprint(self._qtable)
         
 
 
