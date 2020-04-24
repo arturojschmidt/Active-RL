@@ -2,6 +2,7 @@
 from enviroment import Enviroment
 
 from modelFreeActiveLearning import ModelFreeActiveLearning
+from modelBasedActiveLearning import ModelBasedActiveLearning
 import sys
 
 def main():
@@ -11,8 +12,12 @@ def main():
     print(args)
     agentEnviroment = Enviroment()
     agentEnviroment.parseEnviroment("exampleInput.txt")
-    agent = ModelFreeActiveLearning(0.8,10,agentEnviroment,30,1000)
-    agent.QLearning()
+    # agent = ModelFreeActiveLearning(,10,agentEnviroment,30,1000)
+    # agent.QLearning()
+    agent = ModelBasedActiveLearning(agentEnviroment,100,10000,0.9)
+    agent._generateModel(10000)
+    agent.valueIterationBellman()
+
 
 
     #print(agentEnviroment.takeAction(s,a))

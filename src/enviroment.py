@@ -45,6 +45,7 @@ class Enviroment:
         # get the possible outcomes given the state and action
         #print(state, action)
         #print(self.__transitionModel.get(state,action))
+
         probabilityDistribution = self.__transitionModel[(state,action)]
         # generate a random number between 1 and 0 to represent probability
         randomNumber = random.uniform(0,1)
