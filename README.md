@@ -4,3 +4,5 @@
 **please note that enviroment expects the starting state to be 'Fairway'**
 
 Algorithms src code are in src/modelFreeActiveLearning.py and src/modelBasedActiveLearning
+
+Parameters can be changed in src/main.py  , currently set to run both algorithms
