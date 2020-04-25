@@ -12,17 +12,17 @@ def main():
     print(args)
     agentEnviroment = Enviroment()
     agentEnviroment.parseEnviroment("exampleInput.txt")
-    # agent = ModelFreeActiveLearning(,10,agentEnviroment,30,1000)
-    # agent.QLearning()
-    agent = ModelBasedActiveLearning(agentEnviroment,100,10000,0.9)
+
+
+    print('MODEL FREE STATE-ACTION UTILITY')
+    agent = ModelFreeActiveLearning(0.998,0.988,25,agentEnviroment,10000)
+    agent.play()
+    print('------------------------------------------------------------------------------')
+
+    agent = ModelBasedActiveLearning(agentEnviroment,50,10000,0.98,0.98)
     agent._generateModel(10000)
-    agent.valueIterationBellman()
-
-
-
-    #print(agentEnviroment.takeAction(s,a))
-
-
+    agent.play()
+   
 
 
 

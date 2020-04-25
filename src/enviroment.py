@@ -15,7 +15,7 @@ from pprint import pprint
 ENDING_STATE_POSITION = 0
 PROBABILITY_POSITION = 1
 GOAL_STATE_REWARD = 1
-NONTERMINAL_STATE_REWARD = -0.04
+NONTERMINAL_STATE_REWARD = -0.2
 
 
 class Enviroment:
@@ -26,7 +26,7 @@ class Enviroment:
         self.goalState = "In"
         
     def parseEnviroment(self, input):
-
+        # read in from file passed, separate the items and construct the transition model.
         for line in open(input,'r').readlines():
             elements = line.split('/')
 
@@ -64,11 +64,11 @@ class Enviroment:
     def getPossibleActions(self,state):
         return self.__stateActions[state]
     def _generateTransitionModel(self):
+            # turns counts of ocurrences into probabilities
             for outcomes in self.__transitionModel.values():
                 outcomes.sort(key= lambda x: x[PROBABILITY_POSITION])
                 for i in range(1,len(outcomes)):
                     outcomes[i][PROBABILITY_POSITION] += outcomes[i-1][PROBABILITY_POSITION]
 
-            #print(self.__transitionModel)
 
         

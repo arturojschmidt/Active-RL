@@ -1,4 +1,0 @@
-X - Difference Active / Non-active reinforcement learning
-X - Difference model-based / model-free
-X - Relationship MDP / reinforcement learning
-
